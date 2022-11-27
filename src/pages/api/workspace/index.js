@@ -1,26 +1,26 @@
 import slugify from 'slugify';
 
-import {
-  validateCreateWorkspace,
-  validateSession,
-} from '@/config/api-validation/index';
-import { createWorkspace } from '@/prisma/services/workspace';
+export default async function handler(req, res) {
+ 
+var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
 
-const handler = async (req, res) => {
-  const { method } = req;
+var raw = JSON.stringify({
+  
+});
 
-  if (method === 'POST') {
-    const session = await validateSession(req, res);
-    await validateCreateWorkspace(req, res);
-    const { name } = req.body;
-    let slug = slugify(name.toLowerCase());
-    await createWorkspace(session.user.userId, session.user.email, name, slug);
-    res.status(200).json({ data: { name, slug } });
-  } else {
-    res
-      .status(405)
-      .json({ errors: { error: { msg: `${method} method unsupported` } } });
-  }
+var requestOptions = {
+  
+  method: 'POST',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
 };
 
-export default handler;
+const response = await fetch("https://hook.us1.make.com/3ybpvegges9j7868imx3wvc8tqc71buy", requestOptions)
+  const { name } = req.body;
+    let slug = slugify(name.toLowerCase());
+     res.status(200).json({ data: { name, slug } });
+     
+    console.log(data)
+}

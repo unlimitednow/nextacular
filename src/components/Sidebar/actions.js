@@ -3,6 +3,7 @@ import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, PlusIcon, SelectorIcon } from '@heroicons/react/solid';
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
+import { useUser} from "@clerk/clerk-react";
 
 import Button from '@/components/Button/index';
 import Modal from '@/components/Modal/index';
@@ -18,6 +19,7 @@ const Actions = () => {
   const [name, setName] = useState('');
   const [showModal, setModalState] = useState(false);
   const validName = name.length > 0 && name.length <= 16;
+  const { id, user, emailAddresses, username, profileImageUrl, fullName, firstName } = useUser();
 
   const createWorkspace = (event) => {
     event.preventDefault();
@@ -56,7 +58,7 @@ const Actions = () => {
         onClick={toggleModal}
       >
         <PlusIcon className="w-5 h-5 text-white" aria-hidden="true" />
-        <span>Create Workspace</span>
+        <span>Create new site</span>
       </Button>
       <Modal show={showModal} title="Create a Workspace" toggle={toggleModal}>
         <div className="space-y-0 text-sm text-gray-600">
@@ -87,17 +89,17 @@ const Actions = () => {
             <span>Create Workspace</span>
           </Button>
         </div>
-      </Modal>
+      </Modal> 
       <Listbox value={workspace} onChange={handleWorkspaceChange}>
         <div className="relative">
           <Listbox.Button className="relative w-full py-2 pl-3 pr-10 text-left bg-white rounded-lg shadow-md cursor-default">
             <span className="block text-gray-600 truncate">
-              {isLoading
+             {isLoading
                 ? 'Fetching workspaces...'
                 : data?.workspaces.length === 0
                 ? 'No workspaces found'
                 : workspace === null
-                ? 'Select a workspace...'
+                ? ' My first space'
                 : workspace.name}
             </span>
             <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
