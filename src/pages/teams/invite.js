@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import Link from 'next/link';
-import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import toast, { Toaster } from 'react-hot-toast';
+import { useSession } from "@clerk/clerk-react";
 
 import Card from '@/components/Card/index';
 import Button from '@/components/Button';

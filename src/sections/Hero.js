@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { MenuIcon, XIcon } from '@heroicons/react/outline';
-import { useSession } from 'next-auth/react';
+import { useSession } from "@clerk/clerk-react";
 import Link from 'next/link';
 
 const Hero = () => {
