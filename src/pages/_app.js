@@ -5,6 +5,7 @@ import { ThemeProvider } from 'next-themes';
 import ReactGA from 'react-ga';
 import TopBarProgress from 'react-topbar-progress-indicator';
 import { SWRConfig } from 'swr';
+import {ClerkProvider, RedirectToSignIn, SignedIn, SignedOut,} from "@clerk/nextjs";
 
 import progressBarConfig from '@/config/progress-bar/index';
 import swrConfig from '@/config/swr/index';
@@ -20,6 +21,7 @@ const App = ({ Component, pageProps }) => {
   const [progress, setProgress] = useState(false);
   const router = useRouter();
   const swrOptions = swrConfig();
+  const publicPages = ["/]"];
 
   Router.events.on('routeChangeStart', () => setProgress(true));
   Router.events.on('routeChangeComplete', () => setProgress(false));
@@ -42,8 +44,9 @@ const App = ({ Component, pageProps }) => {
       router.events.off('routeChangeComplete', handleRouteChange);
     };
   }, [router.events]);
+  const { pathname } = useRouter();
 
-  return (
+  return ( <ClerkProvider {...pageProps}> <SignedIn>
     <SessionProvider session={pageProps.session}>
       <SWRConfig value={swrOptions}>
         <ThemeProvider attribute="class">
@@ -53,7 +56,14 @@ const App = ({ Component, pageProps }) => {
           </WorkspaceProvider>
         </ThemeProvider>
       </SWRConfig>
-    </SessionProvider>
+    </SessionProvider> </SignedIn>
+        <SignedOut>
+          {publicPages.includes(pathname) ? (
+            <Component {...pageProps} />
+          ) : (
+            <RedirectToSignIn />
+          )}
+        </SignedOut></ClerkProvider>
   );
 };
 

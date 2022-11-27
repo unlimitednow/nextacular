@@ -1,8 +1,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { useSession } from 'next-auth/react';
 import { Toaster } from 'react-hot-toast';
-
+import { SignedIn, useSession } from "@clerk/clerk-react";
 import Content from '@/components/Content/index';
 import Header from '@/components/Header/index';
 import Sidebar from '@/components/Sidebar/index';
@@ -13,14 +12,16 @@ const AccountLayout = ({ children }) => {
   const { data } = useSession();
   const router = useRouter();
   const { workspace } = useWorkspace();
+  const { isLoaded, session } = useSession();
 
   useEffect(() => {
-    if (!data) {
+    if(!isLoaded) {
       router.replace('/auth/login');
     }
-  }, [data, router]);
+  }, [isLoaded, router]);
 
   return (
+     <SignedIn>
     <main className="relative flex flex-col w-screen h-screen space-x-0 text-gray-800 dark:text-gray-200 md:space-x-5 md:flex-row bg-gray-50 dark:bg-gray-800">
       <Sidebar menu={menu(workspace?.slug)} />
       <Content>
@@ -29,6 +30,7 @@ const AccountLayout = ({ children }) => {
         {children}
       </Content>
     </main>
+    </SignedIn>
   );
 };
 
