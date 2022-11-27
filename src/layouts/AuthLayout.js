@@ -1,10 +1,11 @@
 import { Auth, ThemeSupa } from '@supabase/auth-ui-react'
-import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
+import { useSupabaseClient } from '@supabase/auth-helpers-react'
+import {useSession } from "@clerk/clerk-react";
 import Account from '../components/Account'
 import { useEffect } from 'react'
 import { useTheme } from 'next-themes';
 
-const AuthLayout = ({ children }) => {
+const AuthLayout = ({ }) => {
  const session = useSession()
   const supabase = useSupabaseClient()
   const { setTheme } = useTheme();
