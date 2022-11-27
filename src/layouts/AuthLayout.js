@@ -14,7 +14,7 @@ const AuthLayout = ({ children }) => {
 if (session) {
       window.location.href = '/accounts'
     }
-  }, [session])
+  }, [session, setTheme])
   return (
     <div className="container" style={{ padding: '50px 0 100px 0' }}>
       {!session ? (
