@@ -1,27 +1,26 @@
-import { useEffect } from 'react';
-import { useRouter } from 'next/router';
-import { useSession } from 'next-auth/react';
-import { useTheme } from 'next-themes';
-import { Toaster } from 'react-hot-toast';
+import { Auth, ThemeSupa } from '@supabase/auth-ui-react'
+import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
+import Account from '../components/Account'
+import { useEffect } from 'react'
 
 const AuthLayout = ({ children }) => {
-  const router = useRouter();
-  const { data } = useSession();
-  const { setTheme } = useTheme();
+ const session = useSession()
+  const supabase = useSupabaseClient()
 
   useEffect(() => {
     setTheme('light');
-
-    if (data) {
-      router.push('/account');
+if (session) {
+      window.location.href = '/accounts'
     }
-  }, [data, router]);
-
+  }, [session])
   return (
-    <main className="relative flex flex-col items-center justify-center h-screen p-10 space-y-10">
-      <Toaster position="bottom-center" toastOptions={{ duration: 10000 }} />
-      {children}
-    </main>
+    <div className="container" style={{ padding: '50px 0 100px 0' }}>
+      {!session ? (
+        <Auth supabaseClient={supabase} appearance={{ theme: ThemeSupa }} theme="dark" />
+      ) : (
+        <Account session={session} />
+      )}
+    </div>
   );
 };
 
