@@ -10,12 +10,15 @@ import {
   UserCircleIcon,
 } from '@heroicons/react/outline';
 import Link from 'next/link';
-import { signOut, useSession } from 'next-auth/react';
+import { useSession } from "@clerk/clerk-react";
 import { useTheme } from 'next-themes';
+import { useClerk } from "@clerk/clerk-react";
 
 const Header = () => {
   const { data } = useSession();
   const { theme, setTheme } = useTheme();
+    const { signOut } = useClerk();
+
 
   const logOut = () => {
     const result = confirm('Are you sure you want to logout?');
@@ -109,7 +112,7 @@ const Header = () => {
               <Menu.Item>
                 <button
                   className="flex items-center w-full px-2 py-2 space-x-2 text-sm text-gray-800 rounded hover:bg-blue-600 hover:text-white group"
-                  onClick={logOut}
+                  onClick={() => signOut()}
                 >
                   <LogoutIcon aria-hidden="true" className="w-5 h-5" />
                   <span>Logout</span>
