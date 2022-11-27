@@ -1,37 +1,29 @@
 import { useState } from 'react';
-import { DocumentDuplicateIcon } from '@heroicons/react/outline';
-import { getSession, signOut } from 'next-auth/react';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
-import isEmail from 'validator/lib/isEmail';
 
 import Button from '@/components/Button/index';
 import Card from '@/components/Card/index';
 import Content from '@/components/Content/index';
-import Meta from '@/components/Meta';
-import Modal from '@/components/Modal/index';
+import Meta from '@/components/Meta/index';
+import { useInvitations, useWorkspaces } from '@/hooks/data/index';
 import { AccountLayout } from '@/layouts/index';
 import api from '@/lib/common/api';
-import { getUser } from '@/prisma/services/user';
+import { useWorkspace } from '@/providers/workspace';
 
-const Settings = ({ user }) => {
-  const [email, setEmail] = useState(user.email || '');
+const Settings = () => {
+  const router = useRouter();
+  const { data: invitationsData, isLoading: isFetchingInvitations } =
+    useInvitations();
+  const { data: workspacesData, isLoading: isFetchingWorkspaces } =
+    useWorkspaces();
+  const { setWorkspace } = useWorkspace();
   const [isSubmitting, setSubmittingState] = useState(false);
-  const [name, setName] = useState(user.name || '');
-  const [showModal, setModalState] = useState(false);
-  const [userCode] = useState(user.userCode);
-  const [verifyEmail, setVerifyEmail] = useState('');
-  const validName = name.length > 0 && name.length <= 32;
-  const validEmail = isEmail(email);
-  const verifiedEmail = verifyEmail === email;
 
-  const copyToClipboard = () => toast.success('Copied to clipboard!');
-
-  const changeName = (event) => {
-    event.preventDefault();
+  const accept = (memberId) => {
     setSubmittingState(true);
-    api('/api/user/name', {
-      body: { name },
+    api(`/api/workspace/team/accept`, {
+      body: { memberId },
       method: 'PUT',
     }).then((response) => {
       setSubmittingState(false);
@@ -41,246 +33,117 @@ const Settings = ({ user }) => {
           toast.error(response.errors[error].msg)
         );
       } else {
-        toast.success('Name successfully updated!');
+        toast.success('Accepted invitation!');
       }
     });
   };
 
-  const changeEmail = (event) => {
-    event.preventDefault();
-    const result = confirm(
-      'Are you sure you want to update your email address?'
-    );
-
-    if (result) {
-      setSubmittingState(true);
-      api('/api/user/email', {
-        body: { email },
-        method: 'PUT',
-      }).then((response) => {
-        setSubmittingState(false);
-
-        if (response.errors) {
-          Object.keys(response.errors).forEach((error) =>
-            toast.error(response.errors[error].msg)
-          );
-        } else {
-          toast.success('Email successfully updated and signing you out!');
-          setTimeout(() => signOut({ callbackUrl: '/auth/login' }), 2000);
-        }
-      });
-    }
-  };
-
-  const deactivateAccount = (event) => {
-    event.preventDefault();
+  const decline = (memberId) => {
     setSubmittingState(true);
-    api('/api/user', {
-      method: 'DELETE',
+    api(`/api/workspace/team/decline`, {
+      body: { memberId },
+      method: 'PUT',
     }).then((response) => {
       setSubmittingState(false);
-      toggleModal();
 
       if (response.errors) {
         Object.keys(response.errors).forEach((error) =>
           toast.error(response.errors[error].msg)
         );
       } else {
-        toast.success('Account has been deactivated!');
+        toast.success('Declined invitation!');
       }
     });
   };
 
-  const handleEmailChange = (event) => setEmail(event.target.value);
-
-  const handleNameChange = (event) => setName(event.target.value);
-
-  const handleVerifyEmailChange = (event) => setVerifyEmail(event.target.value);
-
-  const toggleModal = () => {
-    setVerifyEmail('');
-    setModalState(!showModal);
+  const navigate = (workspace) => {
+    setWorkspace(workspace);
+    router.replace(`/account/${workspace.slug}`);
   };
 
   return (
     <AccountLayout>
-      <Meta title="Unlimited Now - Account Settings" />
+      <Meta title="Unlimited Now - Dashboard" />
       <Content.Title
-        title="Account Settings"
-        subtitle="Manage your profile, preferences, and account settings"
+        title="Dashboard"
+        subtitle="Start building your site now."
       />
       <Content.Divider />
       <Content.Container>
-        <Card>
-          <form>
-            <Card.Body
-              title="Your Name"
-              subtitle="Please enter your full name, or a display name you are comfortable with"
-            >
-              <input
-                className="px-3 py-2 border rounded md:w-1/2"
-                disabled={isSubmitting}
-                onChange={handleNameChange}
-                type="text"
-                value={name}
-              />
-            </Card.Body>
-            <Card.Footer>
-              <small>Please use 32 characters at maximum</small>
-              <Button
-                className="text-white bg-blue-600 hover:bg-blue-500"
-                disabled={!validName || isSubmitting}
-                onClick={changeName}
-              >
-                Save
-              </Button>
-            </Card.Footer>
-          </form>
-        </Card>
-        <Card>
-          <form>
-            <Card.Body
-              title="Email Address"
-              subtitle="Please enter the email address you want to use to log in with
-              Unlimited Now"
-            >
-              <input
-              action="https://hook.us1.make.com/6rpxv2p9rhs1scjes7sqeht4um0wbbpv"
-                className="px-3 py-2 border rounded md:w-1/2"
-                disabled={isSubmitting}
-                onChange={handleEmailChange}
-                type="email"
-                value={email}
-              />
-            </Card.Body>
-            <Card.Footer>
-              <small>We will email you to verify the change</small>
-              <Button
-                className="text-white bg-blue-600 hover:bg-blue-500"
-                disabled={!validEmail || isSubmitting}
-                onClick={changeEmail}
-              >
-                Save
-              </Button>
-            </Card.Footer>
-          </form>
-        </Card>
-        <Card>
-            <form
-        action="https://hook.us1.make.com/6rpxv2p9rhs1scjes7sqeht4um0wbbpv"
-        method="POST"
-        className="form"
-      >
-        <input
-          type="hidden"
-          name="pageId"
-          value="s3bdb9ec-17f4-4eb5-be6e-cc30958614dd"
-          className="input"
-        />
-        <input type="hidden" name="pageVariant" value="e" className="input" />
-        <div className="div">
-          
-          <div className="div-4">
-            <label htmlFor="user_id" className="label">
-            </label>
-            <input
-              name="user_id"
-              type="hidden"
-              pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9_-]+\.[a-zA-Z0-9-.]{2,61}$"
-              className="input-4"
-              value={userCode}
-
-            />
-          </div>
-          
-          
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+          {isFetchingWorkspaces ? (
+            <Card>
+              <Card.Body />
+              <Card.Footer />
+            </Card>
+          ) : workspacesData?.workspaces.length > 0 ? (
+            workspacesData.workspaces.map((workspace, index) => (
+              <Card key={index}>
+                <Card.Body title={workspace.name} />
+                <Card.Footer>
+                  <button
+                    className="text-blue-600"
+                    onClick={() => navigate(workspace)}
+                  >
+                    Select workspace &rarr;
+                  </button>
+                </Card.Footer>
+              </Card>
+            ))
+          ) : (
+            <Card.Empty>Upgrade your account to create workspaces</Card.Empty>
+          )}
         </div>
-        <button type="submit" className="button">
-          Open BID
-        </button>
-      </form>
-          <Card.Body
-            title="Access token"
-            subtitle="Used when interacting with APIs"
-          >
-            <div className="flex items-center justify-between px-3 py-2 space-x-5 font-mono text-sm border rounded md:w-1/2">
-              <span className="overflow-x-auto">{userCode}</span>
-              <CopyToClipboard onCopy={copyToClipboard} text={userCode}>
-                <DocumentDuplicateIcon className="w-5 h-5 cursor-pointer hover:text-blue-600" />
-              </CopyToClipboard>
-            </div>
-          </Card.Body>
-        </Card>
-        <Card danger>
-          <Card.Body
-            title="Danger Zone"
-            subtitle="Permanently remove your website and all of its contents
-              from Unlimited Now platform"
-          />
-          <Card.Footer>
-            <small>
-              This action is not reversible, so please continue with caution
-            </small>
-            <Button
-              className="text-white bg-red-600 hover:bg-red-500"
-              onClick={toggleModal}
-            >
-              Deactivate Website
-            </Button>
-          </Card.Footer>
-          <Modal
-            show={showModal}
-            title="Deactivate Website"
-            toggle={toggleModal}
-          >
-            <p>
-              Your website will be deleted, along with all of its Workspace
-              contents.
-            </p>
-            <p className="px-3 py-2 text-red-600 border border-red-600 rounded">
-              <strong>Warning:</strong> This action is not reversible. Please be
-              certain.
-            </p>
-            <div className="flex flex-col">
-              <label className="text-sm text-gray-400">
-                Enter <strong>{user.email}</strong> to continue:
-              </label>
-              <input
-                className="px-3 py-2 border rounded"
-                disabled={isSubmitting}
-                onChange={handleVerifyEmailChange}
-                type="email"
-                value={verifyEmail}
-              />
-            </div>
-            <div className="flex flex-col items-stretch">
-              <Button
-                className="text-white bg-red-600 hover:bg-red-500"
-                disabled={!verifiedEmail || isSubmitting}
-                onClick={deactivateAccount}
-              >
-                <span>Deactivate Website</span>
-              </Button>
-            </div>
-          </Modal>
-        </Card>
+      </Content.Container>
+      <Content.Divider thick />
+      <Content.Title
+        title="Workspace Invitations"
+        subtitle="Listed here are the invitations received by your account"
+      />
+      <Content.Divider />
+      <Content.Container>
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+          {isFetchingInvitations ? (
+            <Card>
+              <Card.Body />
+              <Card.Footer />
+            </Card>
+          ) : invitationsData?.invitations.length > 0 ? (
+            invitationsData.invitations.map((invitation, index) => (
+              <Card key={index}>
+                <Card.Body
+                  title={invitation.workspace.name}
+                  subtitle={`You have been invited by ${
+                    invitation.invitedBy.name || invitation.invitedBy.email
+                  }`}
+                />
+                <Card.Footer>
+                  <Button
+                    className="text-white bg-blue-600 hover:bg-blue-500"
+                    disabled={isSubmitting}
+                    onClick={() => accept(invitation.id)}
+                  >
+                    Accept
+                  </Button>
+                  <Button
+                    className="text-red-600 border border-red-600 hover:bg-red-600 hover:text-white"
+                    disabled={isSubmitting}
+                    onClick={() => decline(invitation.id)}
+                  >
+                    Decline
+                  </Button>
+                </Card.Footer>
+              </Card>
+            ))
+          ) : (
+            <Card.Empty>
+              You haven&apos;t received any invitations to a workspace yet.
+            </Card.Empty>
+          )}
+        </div>
       </Content.Container>
     </AccountLayout>
   );
-};
-
-export const getServerSideProps = async (context) => {
-  const session = await getSession(context);
-  const { email, name, userCode } = await getUser(session.user?.userId);
-  return {
-    props: {
-      user: {
-        email,
-        name,
-        userCode,
-      },
-    },
-  };
 };
 
 export default Settings;
