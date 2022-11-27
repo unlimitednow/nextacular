@@ -33,7 +33,7 @@ const Hero = () => {
           >
             <nav className="flex flex-col w-full space-x-0 space-y-3 text-center md:space-y-0 md:space-x-3 md:flex-row">
               <a className="px-5 py-2 rounded hover:bg-gray-100"  href="https://docs.unlimitpotential.com/" >Integrations</a>
-              <a className="px-5 py-2 rounded hover:bg-gray-100"  href="https://accounts.unlimitpotential.com/start">Templates</a>
+              <a className="px-5 py-2 rounded hover:bg-gray-100"  href="https://accounts.unlimitpotential.com/launch">Templates</a>
               <a className="px-5 py-2 rounded hover:bg-gray-100"  href="https://dashboard.unlimitpotential.com/toolkits">Apps & Services</a>
             </nav>
             <Link
