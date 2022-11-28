@@ -61,12 +61,13 @@ const Header = () => {
           <Menu.Items className="absolute right-0 w-40 mt-2 origin-top-right bg-white border divide-y divide-gray-100 rounded">
             <div className="p-2">
               <Menu.Item>
-                <Link href="/account/settings">
-                  <a className="flex items-center w-full px-2 py-2 space-x-2 text-sm text-gray-800 rounded hover:bg-blue-600 hover:text-white group">
-                    <UserCircleIcon aria-hidden="true" className="w-5 h-5" />
-                    <span>Account</span>
-                  </a>
-                </Link>
+                <button
+                  className="flex items-center w-full px-2 py-2 space-x-2 text-sm text-gray-800 rounded hover:bg-blue-600 hover:text-white group"
+                  onClick={() => signOut()}
+                >
+                  <LogoutIcon aria-hidden="true" className="w-5 h-5" />
+                  <span>Logout</span>
+                </button>
               </Menu.Item>
               <Menu.Item>
                 <Link href="/subscriptions">
@@ -109,15 +110,7 @@ const Header = () => {
               </Menu.Item>
             </div>
             <div className="p-2">
-              <Menu.Item>
-                <button
-                  className="flex items-center w-full px-2 py-2 space-x-2 text-sm text-gray-800 rounded hover:bg-blue-600 hover:text-white group"
-                  onClick={() => signOut()}
-                >
-                  <LogoutIcon aria-hidden="true" className="w-5 h-5" />
-                  <span>Logout</span>
-                </button>
-              </Menu.Item>
+             
             </div>
           </Menu.Items>
         </Transition>
