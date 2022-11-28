@@ -12,7 +12,14 @@ import api from '@/lib/common/api';
 import { useWorkspace } from '@/providers/workspace';
 
 const Settings = () => {
-  
+    const router = useRouter();
+  const { data: invitationsData, isLoading: isFetchingInvitations } =
+    useInvitations();
+  const { data: workspacesData, isLoading: isFetchingWorkspaces } =
+    useWorkspaces();
+  const { setWorkspace } = useWorkspace();
+  const [isSubmitting, setSubmittingState] = useState(false);
+
   return (
     <AccountLayout>
       <Meta title="Unlimited Now - Dashboard" />
@@ -22,7 +29,30 @@ const Settings = () => {
       />
       <Content.Divider />
       <Content.Container>
-       
+       <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+          {isFetchingWorkspaces ? (
+            <Card>
+              <Card.Body />
+              <Card.Footer />
+            </Card>
+          ) : workspacesData?.workspaces.length > 0 ? (
+            workspacesData.workspaces.map((workspace, index) => (
+              <Card key={index}>
+                <Card.Body title={workspace.name} />
+                <Card.Footer>
+                  <button
+                    className="text-blue-600"
+                    onClick={() => navigate(workspace)}
+                  >
+                    Select workspace &rarr;
+                  </button>
+                </Card.Footer>
+              </Card>
+            ))
+          ) : (
+            <Card.Empty>Upgrade your account to add more workspaces</Card.Empty>
+          )}
+        </div>
       </Content.Container>
     </AccountLayout>
   );
