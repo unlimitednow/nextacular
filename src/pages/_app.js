@@ -11,6 +11,7 @@ import swrConfig from '@/config/swr/index';
 import WorkspaceProvider from '@/providers/workspace';
 import "styles/tailwind.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import * as FullStory from '@fullstory/browser'
 
 import '@/styles/globals.css';
 
@@ -44,6 +45,12 @@ const App = ({ Component, pageProps }) => {
     };
   }, [router.events]);
   const { pathname } = useRouter();
+
+  
+    useEffect(() => {
+    FullStory.init({ orgId: 'o-1EJHB1-na1'});
+  }, []);
+
 
   return ( <ClerkProvider {...pageProps}> <SignedIn>
       <SWRConfig value={swrOptions}>
