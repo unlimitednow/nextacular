@@ -92,7 +92,9 @@ const Welcome = () => {
           <div className="div-3">
             <p>Start an Online Business</p>
           </div>
-        
+        </a>
+          
+      </div>
       <style jsx>{`
         .div {
           position: relative;
