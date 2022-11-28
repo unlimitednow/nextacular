@@ -91,7 +91,7 @@ const Welcome = () => {
               </Card>
             ))
           ) : (
-            <Card.Empty>Upgrade your account to create workspaces</Card.Empty>
+            <Card.Empty>Upgrade your account to add more workspaces</Card.Empty>
           )}
         </div>
       </Content.Container>
