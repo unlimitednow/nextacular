@@ -79,7 +79,7 @@ const Header = () => {
             </div>
             <div className="p-2">
               <Menu.Item>
-                <Link href="/launch">
+                <Link href="https://accounts.unlimitpotential.com/launch">
                   <a className="flex items-center w-full px-2 py-2 space-x-2 text-sm text-gray-800 rounded hover:bg-blue-600 hover:text-white group">
                     <DesktopComputerIcon
                       aria-hidden="true"
