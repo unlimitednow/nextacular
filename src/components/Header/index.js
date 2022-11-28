@@ -69,7 +69,7 @@ const Header = () => {
                 </Link>
               </Menu.Item>
               <Menu.Item>
-                <Link href="https://dashboard.unlimitednow.site/signin">
+                <Link href="/subscriptions">
                   <a className="flex items-center w-full px-2 py-2 space-x-2 text-sm text-gray-800 rounded hover:bg-blue-600 hover:text-white group">
                     <CreditCardIcon aria-hidden="true" className="w-5 h-5" />
                     <span>Billing</span>
