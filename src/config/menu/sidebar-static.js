@@ -3,7 +3,7 @@ const sidebarMenu = () => [
     name: 'Account',
     menuItems: [
       {
-        name: 'Dashboard',
+        name: 'Workspace',
         path: `/account`,
       },
       {
