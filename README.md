@@ -9,7 +9,7 @@
 An open-source starter kit that will help you build full-stack multi-tenant SaaS platforms efficiently and help you focus on developing your core SaaS features. Built on top of popular and modern technologies such as Next JS, Tailwind, Prisma, ankd Stripe
 
 **Features** packaged out-of-the-box: **Authentication**, **Billing & Payment**, **Database**, **Email**, **Cusstom Domains**, **Multi-tenancy**, **Workspaces**, and **Teams**
-
+l
 ## **Help Ukraine 🇺🇦 Win**
 
 Take a look at the different ways you can [help Ukraine win](https://helpukrainewin.org)
