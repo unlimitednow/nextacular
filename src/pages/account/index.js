@@ -90,7 +90,7 @@ const Welcome = () => {
             <div className="builder-image-sizer image-sizer" />
           </div>
           <div className="div-3">
-            <p>Start an Online Business</p>
+            <p>Create an Online Business</p>
           </div>
         </a>
           
