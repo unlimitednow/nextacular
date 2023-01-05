@@ -72,7 +72,7 @@ const Welcome = () => {
       <Content.Container>
         
       <div className="div">
-          <a className="px-6 py-3 text-center text-blue-600 rounded shadow hover:bg-blue-50" href="https://get.unlimitednow.site/">
+          <a className="px-6 py-3 text-center text-blue-600 rounded shadow hover:bg-blue-50" href="https://feed.unlimitpotential.com/">
           <div className="div-2">
             <picture>
               <source
