@@ -53,14 +53,14 @@ const Actions = () => {
 
   return (
     <div className="flex flex-col items-stretch justify-center px-5 space-y-3">
-      <a href="https://advertise.unlimitednow.me" className="a">
+      <a href="https://connect.unlimitpotential.com/feed" className="a">
       <Button
         className="text-white bg-blue-600 hover:bg-blue-500"
         onClick={toggleModal}
-      >    </a>
+      >  
         <PlusIcon className="w-5 h-5 text-white" aria-hidden="true" />
         <span>Create new site</span>
-      </Button>
+      </Button>  </a>
       <Modal show={showModal} title="Create a Workspace" toggle={toggleModal}>
         <div className="space-y-0 text-sm text-gray-600">
           <p>
