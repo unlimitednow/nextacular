@@ -100,7 +100,7 @@ const Actions = () => {
                 : data?.workspaces.length === 0
                 ? 'No workspaces found'
                 : workspace === null
-                ? ' My first space'
+                ? ' Manage spaces'
                 : workspace.name}
             </span>
             <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
