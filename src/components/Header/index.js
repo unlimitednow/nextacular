@@ -30,7 +30,7 @@ const Header = () => {
 
   const toggleTheme = (event) => {
     event.preventDefault();
-    setTheme(theme === 'dark' ? 'light' : 'dark');
+    setTheme(theme === 'dark' ? 'light' : 'light');
   };
 
   return (
